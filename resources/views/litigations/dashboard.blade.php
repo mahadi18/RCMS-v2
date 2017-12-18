@@ -5,7 +5,7 @@
     <div class="row <?php echo strtolower(country_name_from_id($litigation->nationality));?>">
 
         <div class="case">
-            <div class="case-banner-info">
+            <div class="case-banner-info">11111111111111
                 <div class="row">
                     <div class="col-lg-5 name-country">
                         <div class="thumb">

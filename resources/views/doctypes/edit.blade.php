@@ -19,12 +19,12 @@
                 </div>
                 <div class="form-group">
                      <label for="title">Name</label>
-                     <input type="text" name="title" class="form-control" value="{{$doctype->name}}"/>
+                     <input type="text" name="name" class="form-control" value="{{$doctype->name}}"/>
                 </div>
 
 
 
-            <a class="btn btn-default" href="{{ route('doctypes.index') }}">Back</a>
+            <a class="btn btn-default" href="{{ URL::previous() }}">Back</a>
             <button class="btn btn-primary" type="submit" >Save</button>
             </form>
         </div>

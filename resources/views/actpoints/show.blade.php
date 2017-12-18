@@ -1,6 +1,12 @@
 @extends('layout')
 
 @section('content')
+    @if(Session::has('message'))
+        <div class="alert alert-info">
+            {{ Session::get('message') }}
+        </div>
+    @endif
+    
     <div class="page-header">
         <h1>Action Points / Show </h1>
     </div>
@@ -22,7 +28,7 @@
 
 
 
-            <a class="btn btn-default" href="{{ route('actpoints.index') }}">Back</a>
+            <a class="btn btn-default" href="{{ URL::previous() }}">Back</a>
             <a class="btn btn-warning" href="{{ route('actpoints.edit', $actpoint->id) }}">Edit</a>            
             <form action="{{ route('actpoints.destroy', $actpoint->id) }}" method="POST" style="display: inline;" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };">
                 <input type="hidden" name="_method" value="DELETE">

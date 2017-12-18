@@ -51,6 +51,14 @@ class ServiceController extends Controller {
 	{
 		$service = new Service();
 
+		$this->validate($request,
+			[
+				'title' 	=> 'required|regex:/^[A-z0-9 ]+$/',
+				'body' 		=> 'required|regex:/^[A-z0-9 ]+$/',
+				'care_type' => 'required|regex:/^[A-z0-9 ]+$/',
+			]
+		);
+
 		$service->title = $request->input("title");
         $service->body = $request->input("body");
         $service->care_plan_id = $request->input("care_type");
@@ -96,6 +104,13 @@ class ServiceController extends Controller {
 	public function update(Request $request, $id)
 	{
 		$service = Service::findOrFail($id);
+
+		$this->validate($request,
+			[
+				'title' 	=> 'required|regex:/^[A-z0-9 ]+$/',
+				'body' 		=> 'required|regex:/^[A-z0-9 ]+$/',
+			]
+		);
 
 		$service->title = $request->input("title");
         $service->body = $request->input("body");

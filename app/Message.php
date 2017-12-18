@@ -19,7 +19,7 @@ class Message extends Model
 
     public static function getSentMessages()
     {
-        return Message::where('sender', '=', Auth::user()->id)->where('messages.body','!=','notification')->orderBy('messages.id', 'ASC')->get();
+        return Message::where('sender', '=', Auth::user()->id)->where('messages.body','!=','notification')->orderBy('messages.id', 'DESC')->paginate(10);
     }
 
     public static function getInboxMessages()
@@ -34,12 +34,12 @@ class Message extends Model
                 ->orderBy('messages.created_at', 'DESC')
                 ->where('message_organization.organization_id', $logged_organization)
                 ->where('messages.body','!=','notification')
-                ->get();
+                ->paginate(10);
         } else {
             $messages = DB::table('message_organization')
                 ->join('messages', 'messages.id', '=', 'message_organization.message_id')
                 ->orderBy('messages.created_at', 'DESC')
-                ->get();
+                ->paginate(10);
         }
         // dd($messages);
         return $messages;

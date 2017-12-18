@@ -40,6 +40,12 @@ class DocTypeController extends Controller {
 	{
 		$doctype = new DocType();
 
+		$this->validate($request, 
+			[
+				'name' => 'required|regex:/^[A-z0-9 ]+$/'
+			]
+		);
+
 		$doctype->name = $request->input("name");
 
 		$doctype->save();
@@ -70,6 +76,8 @@ class DocTypeController extends Controller {
 	{
 		$doctype = DocType::findOrFail($id);
 
+		//return $doctype;
+
 		return view('doctypes.edit', compact('doctype'));
 	}
 
@@ -83,6 +91,14 @@ class DocTypeController extends Controller {
 	public function update(Request $request, $id)
 	{
 		$doctype = DocType::findOrFail($id);
+
+		//return $request->input("name");
+
+		$this->validate($request, 
+			[
+				'name' => 'required|regex:/^[A-z0-9 ]+$/',
+			]
+		);
 
 		$doctype->name = $request->input("name");
 
@@ -99,6 +115,7 @@ class DocTypeController extends Controller {
 	 */
 	public function destroy($id)
 	{
+
 		$doctype = DocType::findOrFail($id);
 		$doctype->delete();
 

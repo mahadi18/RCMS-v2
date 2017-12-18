@@ -62,7 +62,7 @@
                             Age
                         </label>
                         <span class="col-lg-6">
-                            {{$litigation->age_year_part}}
+                            {{$physical->age_year_part}} years {{$physical->age_month_part}} months
                         </span>
                     </div>
                 </div>

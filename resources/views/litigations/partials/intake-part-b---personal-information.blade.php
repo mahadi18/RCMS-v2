@@ -730,7 +730,13 @@
                     <td>{!! $i++ !!}.</td>
                     <td>{!! $family_member->full_name !!}</td>
                     <td>{!! $family_member->relation_with_survivor !!}</td>
-                    <td class="center">{!! $family_member->age !!} yrs</td>
+                    <td class="center">
+                    @if( $family_member->age != 0 )
+                    {!! $family_member->age !!} yrs
+                    @else
+                    - - - 
+                    @endif
+                    </td>
                     <td>{!! $family_member->occupation !!}</td>
                     <td>
                         <a class="edit"  data-toggle="modal" data-target="#editModal<?php echo $i;?>" href="javascript:;">Edit</a>
@@ -790,7 +796,7 @@
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <div class="col-lg-4 col-lg-offset-5">
-                                                                <input class="btn btn-info" type="submit" value="Update">
+                                                                <!-- <input class="btn btn-info" type="submit" value="Update"> -->
                                                             </div>
                                                         </div>
                                                     </div>

@@ -26,7 +26,7 @@
 
 
 
-            <a class="btn btn-default" href="{{ route('forms.index') }}">Back</a>
+            <a class="btn btn-default" href="{{ URL::previous() }}">Back</a>
             <a class="btn btn-warning" href="{{ route('forms.edit', $form->id) }}">Edit</a>
             <form action="#/$form->id" method="DELETE" style="display: inline;" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };"><button class="btn btn-danger" type="submit">Delete</button></form>
         </div>

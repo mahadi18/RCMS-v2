@@ -26,7 +26,7 @@
 
 
 
-            <a class="btn btn-default" href="{{ route('ngohirs.index') }}">Back</a>
+            <a class="btn btn-default" href="{{ URL::previous() }}">Back</a>
             <a class="btn btn-warning" href="{{ route('ngohirs.edit', $ngohir->id) }}">Edit</a>
             <form action="#/$ngohir->id" method="DELETE" style="display: inline;" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };"><button class="btn btn-danger" type="submit">Delete</button></form>
         </div>

@@ -75,7 +75,7 @@
                 <div class="form-group">
                     <div class="col-md-4"></div>
                     <div class="col-md-6">
-                        <a class="btn btn-default" href="{{ route('users.index') }}">Back</a>
+                        <a class="btn btn-default" href="{{ URL::previous() }}">Back</a>
                         <button class="btn btn-primary" type="submit" value="Save">Save</button>
                     </div>
                     </div>

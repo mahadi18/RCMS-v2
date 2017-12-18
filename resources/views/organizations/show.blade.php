@@ -1,6 +1,13 @@
 @extends('layout')
 
 @section('content')
+    @if(Session::has('message'))
+    <br>
+        <div class="alert alert-info">
+            {{ Session::get('message') }}
+        </div>
+    @endif
+    
     <div class="page-header">
         <h1>Organizations / Show </h1>
     </div>
@@ -39,12 +46,17 @@
 
 
 
-            <a class="btn btn-default" href="{{ route('organizations.index') }}">Back</a>
+            <a class="btn btn-default" href="{{ URL::previous() }}">Back</a>
             <a class="btn btn-warning" href="{{ route('organizations.edit', $organization->id) }}">Edit</a>
            <!-- <form action="#/{{$organization->id}}" method="DELETE" style="display: inline;" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };"><button class="btn btn-danger" type="submit">Delete</button></form>-->
+            
+            
+            <!-- $cases_of_organization != '' || -->
 
             @if(auth()->user()->roles[0]->name!='contributor')
+                @if( count($users_of_organization) != 0 || count($cases_of_organization) != 0 )
                 <form action="{{ route('organizations.destroy', $organization->id) }}" method="POST" style="display: inline;" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };"><input type="hidden" name="_method" value="DELETE"><input type="hidden" name="_token" value="{{ csrf_token() }}"> <button class="btn btn-danger" type="submit">Delete</button></form>
+                @endif
             @endif
 
             @if(auth()->user()->organization_id == $organization->id)
@@ -85,7 +97,10 @@
                     <a class="btn btn-info" href="{{ route('organizations.show', $organization->id) }}">View</a>
                     <?php if(Auth::user()->roles[0]->name!='contributor') { ?>
                         <a class="btn btn-success" href="{{ route('organization.users', $organization->id) }}">Users</a>
+
+                    @if($cases_of_organization != NULL || $users_of_organization != NULL)
                         <form action="{{ route('organizations.destroy', $organization->id) }}" method="POST" style="display: inline;" onsubmit="if(confirm('Delete? Are you sure?')) { return true } else {return false };"><input type="hidden" name="_method" value="DELETE"><input type="hidden" name="_token" value="{{ csrf_token() }}"> <button class="btn btn-danger" type="submit">Delete</button></form>
+                    @endif
                     <?php } ?>
                 </td>
 

@@ -8,6 +8,11 @@
 
     <div class="row">
         <div class="col-md-12">
+            <?php
+                $arr = message_receiver($message->id);
+                //dd($arr); 
+             ?>
+            <?php //dd($m->name); ?>
 
             <form action="#">
 
@@ -25,10 +30,13 @@
                 </div>
                     <div class="form-group">
                      <label for="receiver">RECEIVER</label>
-                     <p class="form-control-static">{{message_receiver($message->id)}}</p>
+            @foreach($arr as $m)
+                     <p class="form-control-static">{{ $m->name }}</p>
+            @endforeach
                 </div>
 
             </form>
+
 
 
 

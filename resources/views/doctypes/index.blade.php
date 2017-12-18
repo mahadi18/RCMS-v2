@@ -1,6 +1,13 @@
 @extends('layout')
 
 @section('content')
+    @if(Session::has('message'))
+    <br>
+        <div class="alert alert-info">
+            {{ Session::get('message') }}
+        </div>
+    @endif
+    
     <div class="page-header">
         <h1>DocTypes</h1>
     </div>

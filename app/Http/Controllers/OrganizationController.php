@@ -15,10 +15,12 @@ use App\Classes\Organizations;
 use App\Classes\Usability;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\LitigationOrganization;
 use App\Country;
 use App\State;
 use App\District;
 use App\Attachment;
+use DB;
 
 class OrganizationController extends Controller
 {
@@ -147,10 +149,20 @@ class OrganizationController extends Controller
      */
     public function show($id)
     {
+        $users_of_organization = User::where('organization_id','=',$id)->get();
+
+        /*if( count($users_of_organization) == 0 )
+            return "ZERO";
+        else
+            return "NULL";
+*/
+        $cases_of_organization = DB::table('litigation_organization')
+                        ->where('organization_id', '=', $id)->get();
+        
         $organization = Organization::findOrFail($id);
         $organizations = Organization::where('parent_id', '=', $id)->paginate(25);
         //dd($organizations);
-        return view('organizations.show', compact('organization', 'organizations'));
+        return view('organizations.show', compact('organization', 'organizations', 'users_of_organization', 'cases_of_organization'));
     }
 
     /**

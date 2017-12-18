@@ -24,7 +24,7 @@
 
 
 
-            <a class="btn btn-default" href="{{ route('actpoints.index') }}">Back</a>
+            <a class="btn btn-default" href="{{ URL::previous() }}">Back</a>
             <button class="btn btn-primary" type="submit" >Save</a>
             </form>
         </div>

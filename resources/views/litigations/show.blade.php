@@ -37,7 +37,14 @@
                 <p>Gender: <?php echo ($litigation->sex) == 'M' ? 'Male' : 'Female';?></p>
 
                 <p>Age: <?php
-                    if(isset($litigation->date_of_birth)) {
+                    if(isset($physical->date_of_birth)) {
+                    list($year, $month) = calculate_age($physical->date_of_birth);
+                    echo $year . ' years, ' . $month . ' months';
+                    }
+                    elseif(isset($physical->age_year_part)) {
+                        echo $physical->age_year_part. ' years, ' . $physical->age_month_part . ' months';;
+                    }
+                    elseif(isset($litigation->date_of_birth)) {
                     list($year, $month) = calculate_age($litigation->date_of_birth);
                     echo $year . ' years, ' . $month . ' months';
                     }

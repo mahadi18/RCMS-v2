@@ -63,6 +63,15 @@ class FormController extends Controller {
 	{
 		$form = new Form();
 
+        $this->validate($request, 
+                [
+                    'title' => 'required|regex:/^[A-z0-9 ]+$/',
+                    'task_id'    => 'required',
+                    'order'    => 'regex:/^[0-9]+$/',
+                    'country_id'    => 'required',
+                ]
+        );
+
 		$form->title = $request->input("title");
         $form->task_id = $request->input("task_id");
         $form->order = $request->input("order");
@@ -117,6 +126,15 @@ class FormController extends Controller {
 	{
 
 		$form = Form::findOrFail($id);
+
+        $this->validate($request, 
+                [
+                    'title' => 'required|regex:/^[A-z0-9 ]+$/',
+                    'task_id'    => 'required',
+                    'order'    => 'regex:/^[0-9]+$/',
+                    'country_id'    => 'required',
+                ]
+        );
 
         $form->title = $request->input("title");
         $form->task_id = $request->input("task_id");

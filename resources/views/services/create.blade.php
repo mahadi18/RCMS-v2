@@ -32,7 +32,7 @@
 
 
 
-            <a class="btn btn-default" href="{{ route('services.index') }}">Back</a>
+            <a class="btn btn-default" href="{{ URL::previous() }}">Back</a>
             <button class="btn btn-primary" type="submit" >Create</button>
             </form>
         </div>

@@ -52,7 +52,7 @@
 
 
 
-            <a class="btn btn-default" href="{{ route('forms.index') }}">Back</a>
+            <a class="btn btn-default" href="{{ URL::previous() }}">Back</a>
             <button class="btn btn-primary" type="submit" >Save</button>
             </form>
         </div>

@@ -14,7 +14,7 @@
 
                 <div class="form-group">
                      <label for="title">TITLE</label>
-                     <input type="text" name="title" class="form-control" value=""/>
+                     <input type="text" name="title" class="form-control" value=""/><span class="mandatory">*</span>
                 </div>
 
                 <div class="form-group">
@@ -39,7 +39,7 @@
                         <?php } ?>
                     </select>
                 </div>
-                <a class="btn btn-default" href="{{ route('forms.index') }}">Back</a>
+                <a class="btn btn-default" href="{{ URL::previous() }}">Back</a>
             <button class="btn btn-primary" type="submit" >Create</button>
             </form>
         </div>

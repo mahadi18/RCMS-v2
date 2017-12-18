@@ -229,7 +229,9 @@ class LitigationController extends Controller
     {
         //dd($id);
         $litigation = Litigation::findOrFail($id);
-        //dd($litigation);
+        //return ($litigation);
+
+        $physical = Ngohir::where('litigation_id', '=', $id)->first();
         
         $tasks = Litigation::getAccessbileTasks($id,$parent=0);
         $parent_task_id = $request->input("tid") ? $request->input("tid") : 1; //task id of intake from task table
@@ -269,10 +271,11 @@ class LitigationController extends Controller
         $information = Litigation::getCaseInfoWithTasks($template_task,$id);
         //dd($information);
         
-        //$ngohir = Ngohir::where('litigation_id',$id);
+        $ngohir = Ngohir::find($id);
+        //return $ngohir . " === ?";
         //dd($ngohir);
         
-        return view('litigations.show', compact('information','litigation','tasks','sub_tasks','parent_task_id','template_task'));
+        return view('litigations.show', compact('information','litigation','tasks','sub_tasks','parent_task_id','template_task', 'physical'));
     }
 
     /**
@@ -502,6 +505,8 @@ class LitigationController extends Controller
         $litigation = Litigation::findOrFail($litigation_id);
         $litigation->attachemnt = Attachment::getAttachemntForLitigation($litigation_id);
 		$physical = Ngohir::where('litigation_id', '=', $litigation_id)->first();
+
+        //return $physical;
         
         $tasks = Litigation::getAccessbileTasks($litigation_id,$parent=0);
         $parent_task_id = 9; //task id of intake from task table
@@ -748,9 +753,9 @@ class LitigationController extends Controller
 
 	$this->validate($request, [
             'full_name' => 'required|regex:/^[A-z ]+$/',
-            'nick_name' => 'required|regex:/^[A-z ]+$/',
-            'father_name' => 'required|regex:/^[A-z ]+$/',
-            'mother_name' => 'required|regex:/^[A-z ]+$/',
+            'nick_name' => 'regex:/^[A-z ]+$/',
+            'father_name' => 'regex:/^[A-z ]+$/',
+            'mother_name' => 'regex:/^[A-z ]+$/',
         ]);
 
         $date_of_birth = strtotime($request->input("dob"));
@@ -941,6 +946,14 @@ class LitigationController extends Controller
     {
 
         $family_member = new FamilyMember();
+        $this->validate($request, 
+            [
+                'family_member_name'        => 'required|regex:/^[A-z ]+$/',
+                'relation_with_survivor'    => 'regex:/^[A-z ]+$/',
+                'age'                       => 'regex:/^[0-9]+$/',
+                'occupation'                => 'regex:/^[A-z ]+$/',
+            ]
+        );
 
         $family_member->litigation_id           = $id;
         $family_member->full_name               = $request->input("family_member_name");
@@ -956,6 +969,7 @@ class LitigationController extends Controller
 
     public function updatePersonalInformationFamilyMemberInfo(LitigationPersonalInformationFamilyMemberInfoRequest $request, $id)
     {
+        return "Update";
 
         $family_member = FamilyMember::findOrFail($id);
 

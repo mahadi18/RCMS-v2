@@ -11,6 +11,13 @@
 @endsection
 
 @section('content')
+    @if(Session::has('message'))
+    <br>
+        <div class="alert alert-info">
+            {{ Session::get('message') }}
+        </div>
+    @endif
+    
 	<div class="page-header">
         <h1>FormFields</h1>
     </div>

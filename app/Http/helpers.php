@@ -532,10 +532,11 @@ if (!function_exists('message_receiver')) {
             ->where('message_organization.message_id', $message_id)
             ->get();
 
-        return ($receipants[0]->name);
-
+        /*foreach($receipants as $receipant)
+        {*/
+            return ($receipants);
+        //}
     }
-
 }
 
 if (!function_exists('get_organization_country')) {

@@ -26,10 +26,10 @@
              //  dd($messages);
                 ?>
                 <tr class="<?php if($message->last_viewed_by==0) { echo 'not-viewed'; }?>">
-                    <td>{{organization_name_from_user_id($message->sender)}}</td>
-                    <td>{{$message->subject}}</td>
+                    <td>{{ str_limit(organization_name_from_user_id($message->sender), 10) }}</td>
+                    <td>{{str_limit($message->subject, 20) }}</td>
                     <td>{{ Carbon\Carbon::parse($message->created_at)->format('d M Y') }}</td>
-                    <td>{{$message->body}}</td>
+                    <td>{{str_limit($message->body, 50) }}</td>
                    <!-- <td>{{$message->parent_message}}</td>-->
                     <td class="text-right">
                         <a class="btn btn-primary" href="{{ route('messages.showMessage', $message->id) }}">View</a>
@@ -44,6 +44,7 @@
 
             <a class="btn btn-success" href="{{ route('messages.create') }}">Create</a>
         </div>
+        <div class="paginator"> <?php echo $messages->render(); ?></div>
     </div>
 
 

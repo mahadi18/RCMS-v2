@@ -1,10 +1,18 @@
 @extends('layout')
 
 @section('content')
+    @if(Session::has('message'))
+    <br>
+        <div class="alert alert-info">
+            {{ Session::get('message') }}
+        </div>
+    @endif
+
     <div class="page-header">
         <h1>Messages</h1>
     </div>
 
+    <a class="btn btn-success" href="{{ route('messages.create') }}">Create</a>
 
     <div class="row">
         <div class="col-md-12">
@@ -23,27 +31,43 @@
 
                 @foreach($messages as $message)
                 <?php
-               //dd($messages);
+                    //dd($messages);
+                    $arr = message_receiver($message->id);
+                    //dd($arr);
+                    $rcvr = '';
                 ?>
+                <!-- < ?php //dd($m->name); ?> -->
+                    
                 <tr class="<?php if($message->last_viewed_by==0) { echo 'not-viewed'; }?>">
-                    <td>{{message_receiver($message->id)}}</td>
+                
+                    @foreach($arr as $m)
+                        <?php 
+                        $rcvr = $rcvr.$m->name.', '  ?>
+                    @endforeach
+
+                    <td>
+                        {{ str_limit($rcvr, 20) }}
+                    </td>
+                
                     <td>{{$message->subject}}</td>
                     <td>{{ Carbon\Carbon::parse($message->created_at)->format('d M Y') }}</td>
-                    <td>{{$message->body}}</td>
+                    <td>{{ str_limit($message->body, 50) }}</td>
                    <!-- <td>{{$message->parent_message}}</td>-->
                     <td class="text-right">
                         <a class="btn btn-primary" href="{{ route('messages.showMessage', $message->id) }}">View</a>
 
                     </td>
                 </tr>
+                    
 
                 @endforeach
 
                 </tbody>
             </table>
 
-            <a class="btn btn-success" href="{{ route('messages.create') }}">Create</a>
+            
         </div>
+        <div class="paginator"> <?php echo $messages->render(); ?></div>
     </div>
 
 

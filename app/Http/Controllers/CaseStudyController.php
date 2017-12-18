@@ -62,6 +62,12 @@ class CaseStudyController extends Controller
         ///dd($request);
 
         $casestudy = new CaseStudy();
+        $this->validate($request, 
+            [
+                'title' => 'required',
+                'description' => 'required',
+            ]
+        );
         $casestudy->title = $request->input('title');
         $casestudy->description = $request->input('description');
         //dd($casestudy->description);
@@ -109,6 +115,13 @@ class CaseStudyController extends Controller
         ///dd($request);
 
         $casestudy = CaseStudy::findOrFail($id);
+        $this->validate($request, 
+            [
+                'title' => 'required',
+                'description' => 'required',
+            ]
+        );
+
         $casestudy->title = $request->input('title');
         $casestudy->description = $request->input('description');
         //dd($casestudy->description);

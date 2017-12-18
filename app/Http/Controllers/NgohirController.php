@@ -72,6 +72,8 @@ class NgohirController extends Controller {
                 [
                     'name_of_interviewer' => 'required|regex:/^[A-z ]+$/',
                     'name_of_informer'    => 'required|regex:/^[A-z ]+$/',
+                    'place_of_interview'    => 'regex:/^[A-z ]+$/',
+                    'survivor_informer_relation'    => 'regex:/^[A-z ]+$/',
                 ]
             );
 
@@ -261,15 +263,17 @@ class NgohirController extends Controller {
         /** Validation START written by MAHADI **/
 		if($btnID == 1)
         {
-            echo "<pre>";
-            echo $request->input('interview_info')." <> ".$request->input('basic_info')." <> ".$request->input('address_at_source');
+            /*echo "<pre>";
+            echo $request->input('survivor_informer_relation')." <> ".$request->input('basic_info')." <> ".$request->input('address_at_source');
             echo "</pre>";
-            die;
+            die;*/
 
             $this->validate($request, 
                 [
                     'name_of_interviewer' => 'required|regex:/^[A-z ]+$/',
                     'name_of_informer'    => 'required|regex:/^[A-z ]+$/',
+                    'place_of_interview'    => 'regex:/^[A-z ]+$/',
+                    'survivor_informer_relation'    => 'regex:/^[A-z ]+$/',
                 ]
             );
 
@@ -280,12 +284,67 @@ class NgohirController extends Controller {
             {
                 return back()->with('error', 'Date of Interview is invalid!! Please enter a valid date.');;
             }
+
+            /*var_dump( $request->input('name_of_interviewer') );
+            echo " => ";
+            var_dump($ngohir->name_of_interviewer);
+            echo "<br>";
+
+            var_dump( $request->input('place_of_interview') );
+            echo " => ";
+            var_dump($ngohir->place_of_interview);
+            echo "<br>";
+
+            var_dump( strtotime($request->input('date_of_interview')) );
+            echo " => ";
+            var_dump( strtotime($ngohir->date_of_interview) );
+            echo "<br>";
+
+            var_dump( $request->input('name_of_informer') );
+            echo " => ";
+            var_dump($ngohir->name_of_informer);
+            echo "<br>";*/
+
+
+            /*var_dump( $done_over_phone );
+            echo " => ";
+            var_dump($ngohir->done_over_phone);
+            echo "<br>";
+
+            if($done_over_phone == $ngohir->done_over_phone)
+                echo "<br>Both are ZERO <br>";
+            die;*/
+
+            $done_over_phone = 1;
+            if($request->input('done_over_phone') == '')
+                $done_over_phone = 0;
+
+            if(    $request->input('name_of_interviewer') != $ngohir->name_of_interviewer 
+                || $request->input('place_of_interview')  != $ngohir->place_of_interview
+                || strtotime($request->input('date_of_interview'))   
+                != strtotime($ngohir->date_of_interview)
+                || $request->input('name_of_informer')    != $ngohir->name_of_informer
+                || $request->input('survivor_informer_relation')    
+                != $ngohir->survivor_informer_relation
+                || $done_over_phone                       != $ngohir->done_over_phone     
+            )
+            {
+                $ngohir->name_of_interviewer                    = $request->has('name_of_interviewer') ? $request->input('name_of_interviewer') : $ngohir->name_of_interviewer;
+                $ngohir->place_of_interview                     = $request->has('place_of_interview') ? $request->input('place_of_interview') : $ngohir->place_of_interview;
+                $ngohir->date_of_interview                      = $request->has('date_of_interview') ? Carbon::createFromFormat('d-m-Y', $request->input('date_of_interview'), session('user_current_timezone'))->setTimezone('UTC')->toDateString() : $ngohir->date_of_interview;
+                $ngohir->name_of_informer                       = $request->has('name_of_informer') ? $request->input('name_of_informer') : $ngohir->name_of_informer;
+                $ngohir->survivor_informer_relation             = $request->has('survivor_informer_relation') ? $request->input('survivor_informer_relation') : $ngohir->survivor_informer_relation;
+                $ngohir->done_over_phone                        = $request->has('done_over_phone') ? $request->input('done_over_phone') : 0;
+
+                $ngohir->save();
+
+                $portion = 'Interview Information';
+                return redirect('/cases/'.$request->input('litigation_id').'?tid='.$request->input('task_id'))->with('message', $portion.' Updated Successfully');
+            }
+            else return back();
         }
         elseif ($btnID == 2) 
-        {
-            return $portion;
-            die;
-            
+        {            
             $this->validate($request, 
                 [
                     'name_of_the_survivor_at_destination' => 'required|regex:/^[A-z ]+$/',
@@ -310,25 +369,30 @@ class NgohirController extends Controller {
             {
                 return back()->with('error', 'Age Information field is required');
             }
-        }
-        /** validation END written by MAHADI **/
 
+            if( $request->input("dob")     != $ngohir->date_of_birth 
+                || $ngohir->age_year_part  != $request->input("age_year_part") 
+                || $ngohir->age_month_part != $request->input("age_month_part") 
+                || $ngohir->name_of_the_survivor_at_destination != $request->input("name_of_the_survivor_at_destination") 
+                || $ngohir->case_filed_by_parents != $request->input("case_filed_by_parents") 
+                || $ngohir->father_name != $request->input("father_name") 
+                || $ngohir->mother_name != $request->input("mother_name") 
+                || $ngohir->guardian_occupation != $request->input("guardian_occupation") 
+                || $ngohir->guardian_monthly_income != $request->input("guardian_monthly_income") 
+                || $ngohir->marital_status != $request->input("marital_status") 
+                || $ngohir->spouse_name != $request->input("spouse_name") 
+                || $ngohir->sex != $request->input("sex") 
+                || $ngohir->nationality != $request->input("nationality") 
+                || $ngohir->religion != $request->input("religion") 
+                || $ngohir->education != $request->input("education") 
+            )
+            {
+                $ngohir->name_of_the_survivor_at_destination    = $request->has('name_of_the_survivor_at_destination') ? $request->input('name_of_the_survivor_at_destination') : $ngohir->name_of_the_survivor_at_destination;
+                
+                $ngohir->case_filed_by_parents                  = $request->has('case_filed_by_parents') ? $request->input('case_filed_by_parents') : $ngohir->case_filed_by_parents ;
+                
 
-
-//      $ngohir->litigation_id                          = $id;
-        $ngohir->name_of_interviewer                    = $request->has('name_of_interviewer') ? $request->input('name_of_interviewer') : $ngohir->name_of_interviewer;
-        $ngohir->place_of_interview                     = $request->has('place_of_interview') ? $request->input('place_of_interview') : $ngohir->place_of_interview;
-        $ngohir->date_of_interview                      = $request->has('date_of_interview') ? Carbon::createFromFormat('d-m-Y', $request->input('date_of_interview'), session('user_current_timezone'))->setTimezone('UTC')->toDateString() : $ngohir->date_of_interview;
-        $ngohir->name_of_informer                       = $request->has('name_of_informer') ? $request->input('name_of_informer') : $ngohir->name_of_informer;;
-//        $ngohir->name_of_the_survivor_at_source         = $request->input('name_of_the_survivor_at_source');
-        $ngohir->name_of_the_survivor_at_destination    = $request->has('name_of_the_survivor_at_destination') ? $request->input('name_of_the_survivor_at_destination') : $ngohir->name_of_the_survivor_at_destination;
-        $ngohir->father_name                            = $request->has('father_name') ? $request->input('father_name') : $ngohir->father_name;
-        $ngohir->mother_name                            = $request->has('mother_name') ? $request->input('mother_name') : $ngohir->mother_name;
-        $ngohir->marital_status                         = $request->has('marital_status') ? $request->input('marital_status') : $ngohir->marital_status;
-        $ngohir->spouse_name                            = $request->has('spouse_name') ? $request->input('spouse_name'): $ngohir->spouse_name;
-//        $ngohir->date_of_birth                          = date('Y-m-d', strtotime($request->input("date_of_birth")));
-
-        if($request->has('age_select')) {
+                if($request->has('age_select')) {
             if(strlen($request->input("dob")) > 0) {
                 $ngohir->date_of_birth              = date('Y-m-d', strtotime($request->input("dob")));
                 list($ngohir->age_year_part, $ngohir->age_month_part) = calculate_age($request->input("dob"));
@@ -339,26 +403,68 @@ class NgohirController extends Controller {
             }
         } else {
             $ngohir->date_of_birth                  = $ngohir->date_of_birth ? $ngohir->date_of_birth : null;
-            $ngohir->age_year_part                  = $ngohir->age_year_part ? $ngohir->age_year_part : null;;
-            $ngohir->age_month_part                 = $ngohir->age_month_part ? $ngohir->age_month_part : null;;
+            $ngohir->age_year_part                  = $ngohir->age_year_part ? $ngohir->age_year_part : null;
+            $ngohir->age_month_part                 = $ngohir->age_month_part ? $ngohir->age_month_part : null;
+        }
+                
+                $ngohir->father_name                            = $request->has('father_name') ? $request->input('father_name') : $ngohir->father_name;
+                
+                $ngohir->mother_name                            = $request->has('mother_name') ? $request->input('mother_name') : $ngohir->mother_name;
+                
+                $ngohir->guardian_occupation                    = $request->has('guardian_occupation') ? $request->input('guardian_occupation') : $ngohir->guardian_occupation ;
+                
+                $ngohir->guardian_monthly_income                = $request->has('guardian_monthly_income') ? $request->input('guardian_monthly_income') : $ngohir->guardian_monthly_income;
+                
+                $ngohir->marital_status                         = $request->has('marital_status') ? $request->input('marital_status') : $ngohir->marital_status;
+                
+                $ngohir->spouse_name                            = $request->has('spouse_name') ? $request->input('spouse_name'): $ngohir->spouse_name;
+                
+                $ngohir->sex                                    = $request->has('sex') ? $request->input('sex') : $ngohir->sex;
+                
+                $ngohir->nationality                            = $request->has('nationality') ? $request->input('nationality') : $ngohir->nationality;
+                
+                $ngohir->religion                               = $request->has('religion') ? $request->input('religion') : $ngohir->religion;
+                
+                $ngohir->education                              = $request->has('education') ? $request->input('education') : $ngohir->education;
+
+
+                $ngohir->save();
+
+                $portion = 'Survivor Basic Information';
+                return redirect('/cases/'.$request->input('litigation_id').'?tid='.$request->input('task_id'))->with('message', $portion.' Updated Successfully');
+            }
+
+            else  return back();
+
         }
 
-        $ngohir->nationality                            = $request->has('nationality') ? $request->input('nationality') : $ngohir->nationality;
-        $ngohir->religion                               = $request->has('religion') ? $request->input('religion') : $ngohir->religion;
-        $ngohir->education                              = $request->has('education') ? $request->input('education') : $ngohir->education;
+        /** validation END written by MAHADI **/
+
+
+
+//      $ngohir->litigation_id                          = $id;
+//        $ngohir->name_of_the_survivor_at_source         = $request->input('name_of_the_survivor_at_source');
+
+
+        
+
+
+
+
+
+
+
+
         $ngohir->history_of_previous_stay               = $request->has('history_of_previous_stay') ? $request->input('history_of_previous_stay') : $ngohir->history_of_previous_stay;
         $ngohir->height_ft_part                         = $request->has('height_ft_part') ? $request->input('height_ft_part') : $ngohir->height_ft_part;
         $ngohir->height_in_part                         = $request->has('height_in_part') ? $request->input('height_in_part') : $ngohir->height_in_part;
-        $ngohir->sex                                    = $request->has('sex') ? $request->input('sex') : $ngohir->sex;
         $ngohir->birth_mark                             = $request->has('birth_mark') ? $request->input('birth_mark') : $ngohir->birth_mark;
         $ngohir->complexion                             = $request->has('complexion') ? $request->input('complexion') : $ngohir->complexion;
         $ngohir->pregnancy                              = $request->has('pregnancy') ? $request->input('pregnancy') : $ngohir->pregnancy;
         $ngohir->accompanying_with_survivor             = $request->has('accompanying_with_survivor') ? $request->input('accompanying_with_survivor') : $ngohir->accompanying_with_survivor;
         $ngohir->abuse                                  = $request->has('abuse') ? $request->input('abuse') : $ngohir->abuse;
         $ngohir->if_yes_type                            = $request->has('if_yes_type') ? $request->input('if_yes_type') : $ngohir->if_yes_type;
-        $ngohir->case_filed_by_parents                  = $request->has('case_filed_by_parents') ? $request->input('case_filed_by_parents') : 0;
         $ngohir->case_filed_no                          = $request->has('case_file_number') ? $request->input('case_file_number') : '';
-        $ngohir->done_over_phone                        = $request->has('done_over_phone') ? $request->input('done_over_phone') : 0;
         $ngohir->survivor_informer_relation             = $request->has('survivor_informer_relation') ? $request->input('survivor_informer_relation') : $ngohir->survivor_informer_relation;
         $ngohir->eye_color                              = $request->has('eye_color') ? $request->input('eye_color') : $ngohir->eye_color;
         $ngohir->hair_color                             = $request->has('hair_color') ? $request->input('hair_color') : $ngohir->hair_color;
@@ -386,15 +492,21 @@ class NgohirController extends Controller {
         }
 
 
-        if($ngohir->save()) {
+        if($ngohir->save()) 
+        {
             /* Address Edit Start */
-            if($request->has('survivor_address_title')) {
+            if($request->has('survivor_address_title')) 
+            {
                 $survivor_address_title = array_merge(['present_address', 'native_address'], $request->input('survivor_address_title'));
-            } else {
+            } 
+            else 
+            {
                 $survivor_address_title = ['present_address', 'native_address'];
             }
-//dd(count($request->input("address_id")));
-            for($i=0;$i<count($request->input("address_id"));$i++) {
+
+            //dd(count($request->input("address_id")));
+            for( $i=0; $i<count($request->input("address_id")); $i++ )
+             {
 
                 $survivor_address = Address::findOrFail($request->input("address_id")[$i]);
 
@@ -412,6 +524,7 @@ class NgohirController extends Controller {
                 $survivor_address->save();
             }
             /* Address Edit End */
+
             $in_progress_status_id =  Usability::TaskInProgressStatusID();
             //dd($in_progress_status_id);
             Litigation::saveCaseTask($in_progress_status_id,$request->input('litigation_id'), $request->input('task_id'));
